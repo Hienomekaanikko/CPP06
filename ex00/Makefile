@@ -1,8 +1,8 @@
 CC = c++
 FLAGS = -Wall -Wextra -Werror -std=c++20
-SRC = main.cpp Bureaucrat.cpp
+SRC = main.cpp ScalarConverter.cpp
 OBJ = $(SRC:.cpp=.o)
-NAME = bureaucrat
+NAME = converter
 RM = rm -f
 
 all: $(NAME)

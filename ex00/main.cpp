@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ScalarConverter.hpp                                :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msuokas <msuokas@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/02 16:23:21 by msuokas           #+#    #+#             */
-/*   Updated: 2025/10/03 15:38:19 by msuokas          ###   ########.fr       */
+/*   Created: 2025/10/03 15:13:01 by msuokas           #+#    #+#             */
+/*   Updated: 2025/10/06 13:18:44 by msuokas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include "ScalarConverter.hpp"
 
-#include <iostream>
-
-class ScalarConverter {
-	public:
-		ScalarConverter() = delete;
-		~ScalarConverter() = delete;
-		ScalarConverter(const ScalarConverter& other) = delete;
-		ScalarConverter& operator=(const ScalarConverter& other) = delete;
-
-		static void convert(const std::string& literal);
-};
+int	main(int ac, char **av) {
+	if (ac != 2)
+		std::cout << "Error: Invalid input" << std::endl;
+	else
+		ScalarConverter::convert(av[1]);
+}

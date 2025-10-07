@@ -24,4 +24,5 @@ int main(void) {
 
 	Data *deserialized = Serializer::deserialize(serialized);
 	std::cout << "Deserialized data struct: " << things;
+	return 0;
 }

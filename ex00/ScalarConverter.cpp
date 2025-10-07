@@ -20,7 +20,7 @@
 #include <cctype>
 
 bool isSpecial(const std::string& value) {
-	return value == "nan" || value == "+nan" || value == "-nan" ||
+	return value == "nan" || value == "+nan" ||
 			value == "inf" || value == "+inf" || value == "-inf";
 }
 
@@ -78,32 +78,41 @@ void fromDouble(double num) {
 }
 
 void ScalarConverter::convert(const std::string& value) {
-	if (isSpecial(value)) {
-		double num;
-		if (value[0] == '-') num = -std::numeric_limits<double>::infinity();
-		else if (value[0] == '+') num = std::numeric_limits<double>::infinity();
-		else if (value == "nan") num = std::numeric_limits<double>::quiet_NaN();
-		else if (value == "inf") num = std::numeric_limits<double>::infinity();
-		fromDouble(num);
-		return;
-	}
-	if (value.length() == 1 && !std::isdigit(value[0])) {
-		fromChar(value[0]);
-		return;
-	}
-	std::string tmp = value;
-	bool isFloatLiteral = false;
-	if (!tmp.empty() && tmp.back() == 'f') {
-		tmp.pop_back();
-		isFloatLiteral = true;
-	}
-	try {
-		double num = std::stod(tmp);
-		if (isFloatLiteral)
-			fromFloat(num);
-		else
-			fromDouble(num);
-	} catch (const std::exception& e) {
-		std::cerr << "Error: invalid input or out of range" << std::endl;
-	}
+    if (isSpecial(value)) {
+        double num;
+        if (value[0] == '-') num = -std::numeric_limits<double>::infinity();
+        else if (value[0] == '+') num = std::numeric_limits<double>::infinity();
+        else if (value == "nan") num = std::numeric_limits<double>::quiet_NaN();
+        else if (value == "inf") num = std::numeric_limits<double>::infinity();
+        fromDouble(num);
+        return;
+    }
+
+    if (value.length() == 1 && !std::isdigit(value[0])) {
+        fromChar(value[0]);
+        return;
+    }
+
+    std::string tmp = value;
+    bool isFloatLiteral = false;
+    if (!tmp.empty() && tmp.back() == 'f') {
+        tmp.pop_back();
+        isFloatLiteral = true;
+    }
+    char* end;
+    if (isFloatLiteral) {
+        float fnum = std::strtof(tmp.c_str(), &end);
+        if (end == tmp.c_str() || *end != '\0') {
+            std::cerr << "Error: invalid input" << std::endl;
+            return;
+        }
+        fromFloat(fnum);
+    } else {
+        double dnum = std::strtod(tmp.c_str(), &end);
+        if (end == tmp.c_str() || *end != '\0') {
+            std::cerr << "Error: invalid input" << std::endl;
+            return;
+        }
+        fromDouble(dnum);
+    }
 }

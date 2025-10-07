@@ -17,4 +17,5 @@ int	main(int ac, char **av) {
 		std::cout << "Error: Invalid input" << std::endl;
 	else
 		ScalarConverter::convert(av[1]);
+	return 0;
 }

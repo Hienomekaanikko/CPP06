@@ -11,15 +11,73 @@
 /* ************************************************************************** */
 
 #include "Base.hpp"
+#include "A.hpp"
+#include "B.hpp"
+#include "C.hpp"
+
+Base* generate(void) {
+    static bool seeded = false;
+    if (!seeded) {
+        std::srand(time(nullptr));
+        seeded = true;
+    }
+    int r = std::rand() % 3;
+    switch (r) {
+        case 0:
+            return new A();
+        case 1:
+            return new B();
+        case 2:
+            return new C();
+        default:
+            return nullptr;
+    }
+}
+
+void identify(Base* p) {
+    if (dynamic_cast<A*>(p))
+        std::cout << "A" << std::endl;
+    else if (dynamic_cast<B*>(p))
+        std::cout << "B" << std::endl;
+    else if (dynamic_cast<C*>(p))
+        std::cout << "C" << std::endl;
+    else
+        std::cout << "Unknown type" << std::endl;
+}
+
+void identify(Base& p) {
+    try {
+        (void)dynamic_cast<A&>(p);
+        std::cout << "A" << std::endl;
+        return;
+    } catch (std::bad_cast&) {}
+
+    try {
+        (void)dynamic_cast<B&>(p);
+        std::cout << "B" << std::endl;
+        return;
+    } catch (std::bad_cast&) {}
+
+    try {
+        (void)dynamic_cast<C&>(p);
+        std::cout << "C" << std::endl;
+        return;
+    } catch (std::bad_cast&) {}
+
+    std::cout << "Unknown type" << std::endl;
+}
 
 int main(void) {
-    Base* thing = nullptr;
+    Base* obj = nullptr;
     try {
-        thing = generate();
-        identify(thing);
-        identify(*thing);
+        obj = generate();
+        std::cout << "By pointer: ";
+        identify(obj);
+        std::cout << "By reference: ";
+        identify(*obj);
     } catch (std::exception &e) {
         std::cout << "Exception: " << e.what() << std::endl;
     }
-    delete thing;
+    delete obj;
+    return 0;
 }
